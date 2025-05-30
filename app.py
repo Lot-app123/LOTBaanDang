@@ -85,42 +85,60 @@ def lottery():
         return send_file(zip_filename, mimetype="application/zip", as_attachment=True, download_name=zip_filename)
 
     return render_template("index copy.html")
-
+# 🔹 ฟังก์ชัน auto fit font
+def get_auto_font(draw, text, font_path, max_width, start_size=50, min_size=20):
+    for size in range(start_size, min_size - 1, -1):
+        font = ImageFont.truetype(font_path, size)
+        bbox = draw.textbbox((0, 0), text, font=font)
+        text_width = bbox[2] - bbox[0]
+        if text_width <= max_width:
+            return font
+    return ImageFont.truetype(font_path, min_size)
 # 🔹 ฟังก์ชันสร้างรูปภาพ (เหมือนเดิม)
 def create_image(lottery_type):
-    bg_path = os.path.join("static", "Baan1.jpg")
-    font_path = os.path.join("static", "Mali-Bold.ttf")
+    bg_path = os.path.join("static", "Baan.jpg")
+    font_path = os.path.join("static", "SURATANADEMO-ExtraBold.ttf")
 
     image = Image.open(bg_path)
     draw = ImageDraw.Draw(image)
 
-    font_large = ImageFont.truetype(font_path, 100)
-    font_medium = ImageFont.truetype(font_path, 70)
-    font_small = ImageFont.truetype(font_path, 40)
+    font_large = ImageFont.truetype(font_path, 75)
+    font_medium = ImageFont.truetype(font_path, 60)
+    font_small = ImageFont.truetype(font_path, 50)
+    font_verysmall = ImageFont.truetype(font_path, 30)
 
-    #date_text = datetime.now().strftime("%d.%m.%y")
-    #draw.text((250, 50), date_text, font=font_medium, fill="yellow")
+    date_text = datetime.now().strftime("%d.%m.%y")
+    draw.text((190, 50), date_text, font=font_verysmall, fill="#ffca08")
 
-    bbox = draw.textbbox((0, 0), lottery_type, font=font_medium)
+    max_width = image.width - 100  # เว้นขอบซ้ายขวาอย่างละ 50 px
+
+    # เลือกฟอนต์อัตโนมัติ
+    font_auto = get_auto_font(draw, lottery_type, font_path, max_width)
+
+    bbox = draw.textbbox((0, 0), lottery_type, font=font_auto)
     text_width, text_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
     # คำนวณตำแหน่งให้อยู่ตรงกลาง
-    image_width = image.width
-    x_position = (image_width - text_width) // 2  # ตำแหน่ง X ให้อยู่ตรงกลาง
-    y_position = 50  # ให้ข้อความอยู่ด้านบน
+    image_width = image.width 
+    x_position = (image_width - text_width) // 2 # ตำแหน่ง X ให้อยู่ตรงกลาง
+    offset = x_position 
+    y_position = 110  # ให้ข้อความอยู่ด้านบน
 
     # วาดข้อความที่คำนวณแล้ว
-    draw.text((x_position, y_position), lottery_type, font=font_medium, fill="white")
+    draw.text((offset, y_position), lottery_type, font=font_auto, fill="#ffca08")
 
-    #draw.text((250,50), lottery_type, font=font_medium, fill="white")
+    #draw.text((250,50), lottery_type, font=font_medium, fill=="#ffca08")
 
     num1, num2 = random.sample(range(0, 10), 2)
 
-    # สร้างรายการเลขสองหลักที่ขึ้นต้นด้วย num1 และ num2
-    all_tens = [f"{num1}{i}" for i in range(10)]
-    all_units = [f"{num2}{i}" for i in range(10)]
+    # 🔥 ห้ามให้มี 23 หรือ 32 (ตามตัวอย่าง)
+    disallowed = {f"{num1}{num2}", f"{num2}{num1}"}
 
-    # สุ่มไม่ให้ซ้ำกัน
+    # 🔹 สร้างรายการเลขสองหลักที่ขึ้นต้นด้วย num1 และไม่ใช่ disallowed
+    all_tens = [f"{num1}{i}" for i in range(10) if f"{num1}{i}" not in disallowed]
+    all_units = [f"{num2}{i}" for i in range(10) if f"{num2}{i}" not in disallowed]
+
+    # 🔹 สุ่มไม่ซ้ำกัน
     tens = random.sample(all_tens, 1)
     tens2 = random.sample([x for x in all_tens if x not in tens], 1)
     tens3 = random.sample([x for x in all_tens if x not in tens + tens2], 1)
@@ -128,27 +146,27 @@ def create_image(lottery_type):
     units = random.sample(all_units, 1)
     units2 = random.sample([x for x in all_units if x not in units], 1)
     units3 = random.sample([x for x in all_units if x not in units + units2], 1)
+
     random_6_digits = "".join(random.choices(f"{num1}{num2}" + "0123456789", k=6))
 
-    draw.text((595, 245), f"{num1} - {num2}", font=font_large, fill="white")
-    draw.text((520, 450), " ".join(tens[:1]), font=font_large, fill="white")
-    draw.text((520, 600), " ".join(tens2[:1]), font=font_large, fill="white")
-    draw.text((520, 750), " ".join(tens3[:1]), font=font_large, fill="white")
-    draw.text((770, 450), " ".join(units[:1]), font=font_large, fill="white")
-    draw.text((770, 600), " ".join(units2[:1]), font=font_large, fill="white")
-    draw.text((770, 750), " ".join(units3[:1]), font=font_large, fill="white")
-    #draw.text((250, 520), f"วิน.{random_6_digits}", font=font_medium, fill="yellow")
+    draw.text((160, 190), f"{num1} - {num2}", font=font_large, fill="#ffca08")
+    draw.text((120, 320), " ".join(tens[:1]), font=font_medium, fill="#ffca08")
+    draw.text((210, 320), " ".join(tens2[:1]), font=font_medium, fill="#ffca08")
+    draw.text((300, 320), " ".join(tens3[:1]), font=font_medium, fill="#ffca08")
+    draw.text((120, 430), " ".join(units[:1]), font=font_medium, fill="#ffca08")
+    draw.text((210, 430), " ".join(units2[:1]), font=font_medium, fill="#ffca08")
+    draw.text((300, 430), " ".join(units3[:1]), font=font_medium, fill="#ffca08")
+    #draw.text((250, 520), f"วิน.{random_6_digits}", font=font_medium, fill=="#ffca08")
 
-    output_filename = f"output_{lottery_type}.png"
+    output_filename = f"output_{lottery_type}.jpg"
     output_path = os.path.join("static", output_filename)
 
     image.save(output_path)
     return output_path
 
-
 #if __name__ == "__main__":Edit By Frank 
  #   app.run(debug=True)
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5001))
     app.run(host="0.0.0.0", port=port)
