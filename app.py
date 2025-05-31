@@ -85,6 +85,11 @@ def lottery():
         return send_file(zip_filename, mimetype="application/zip", as_attachment=True, download_name=zip_filename)
 
     return render_template("index copy.html")
+def draw_bold_text(draw, position, text, font, fill="#ffca08", boldness=2):
+    x, y = position
+    for dx in range(-boldness, boldness + 1):
+        for dy in range(-boldness, boldness + 1):
+            draw.text((x + dx, y + dy), text, font=font, fill=fill)
 # 🔹 ฟังก์ชัน auto fit font
 def get_auto_font(draw, text, font_path, max_width, start_size=50, min_size=20):
     for size in range(start_size, min_size - 1, -1):
