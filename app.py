@@ -130,9 +130,7 @@ def create_image(lottery_type):
     y_position = 110  # ให้ข้อความอยู่ด้านบน
 
     # วาดข้อความที่คำนวณแล้ว
-    draw.text((offset, y_position), lottery_type, font=font_auto, fill="#ffca08")
-
-    #draw.text((250,50), lottery_type, font=font_medium, fill=="#ffca08")
+    draw_bold_text(draw, (offset, y_position), lottery_type, font_auto, fill="#ffca08", boldness=1)
 
     num1, num2 = random.sample(range(0, 10), 2)
 
@@ -154,13 +152,13 @@ def create_image(lottery_type):
 
     random_6_digits = "".join(random.choices(f"{num1}{num2}" + "0123456789", k=6))
 
-    draw.text((160, 190), f"{num1} - {num2}", font=font_large, fill="#ffca08")
-    draw.text((120, 320), " ".join(tens[:1]), font=font_medium, fill="#ffca08")
-    draw.text((210, 320), " ".join(tens2[:1]), font=font_medium, fill="#ffca08")
-    draw.text((300, 320), " ".join(tens3[:1]), font=font_medium, fill="#ffca08")
-    draw.text((120, 430), " ".join(units[:1]), font=font_medium, fill="#ffca08")
-    draw.text((210, 430), " ".join(units2[:1]), font=font_medium, fill="#ffca08")
-    draw.text((300, 430), " ".join(units3[:1]), font=font_medium, fill="#ffca08")
+    draw_bold_text(draw, (160, 190), f"{num1} - {num2}", font=font_large, fill="#ffca08", boldness=1)
+    draw_bold_text(draw,(120, 320), " ".join(tens[:1]), font=font_medium, fill="#ffca08", boldness=1)
+    draw_bold_text(draw,(210, 320), " ".join(tens2[:1]), font=font_medium, fill="#ffca08", boldness=1)
+    draw_bold_text(draw,(300, 320), " ".join(tens3[:1]), font=font_medium, fill="#ffca08", boldness=1)
+    draw_bold_text(draw,(120, 430), " ".join(units[:1]), font=font_medium, fill="#ffca08", boldness=1)
+    draw_bold_text(draw,(210, 430), " ".join(units2[:1]), font=font_medium, fill="#ffca08", boldness=1)
+    draw_bold_text(draw,(300, 430), " ".join(units3[:1]), font=font_medium, fill="#ffca08", boldness=1)
     #draw.text((250, 520), f"วิน.{random_6_digits}", font=font_medium, fill=="#ffca08")
 
     output_filename = f"output_{lottery_type}.jpg"
