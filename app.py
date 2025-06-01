@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, send_file, redirect, url_for, session
 from flask_login import LoginManager, login_user, login_required, logout_user, UserMixin, current_user 
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import random
 import os
 from PIL import Image, ImageDraw, ImageFont
@@ -112,7 +113,7 @@ def create_image(lottery_type):
     font_small = ImageFont.truetype(font_path, 50)
     font_verysmall = ImageFont.truetype(font_path, 30)
 
-    date_text = datetime.now().strftime("%d.%m.%y")
+    date_text = datetime.now(ZoneInfo("Asia/Bangkok")).strftime("%d.%m.%y")
     draw.text((190, 50), date_text, font=font_verysmall, fill="#ffca08")
 
     max_width = image.width - 100  # เว้นขอบซ้ายขวาอย่างละ 50 px
