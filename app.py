@@ -160,6 +160,7 @@ def create_image(lottery_type):
     draw_bold_text(draw,(120, 430), " ".join(units[:1]), font=font_medium, fill="#ffca08", boldness=1)
     draw_bold_text(draw,(210, 430), " ".join(units2[:1]), font=font_medium, fill="#ffca08", boldness=1)
     draw_bold_text(draw,(300, 430), " ".join(units3[:1]), font=font_medium, fill="#ffca08", boldness=1)
+    draw_bold_text(draw,(55, 520),  f"วิน.{random_6_digits}", font=font_small, fill="#ffca08", boldness=1)
     #draw.text((250, 520), f"วิน.{random_6_digits}", font=font_medium, fill=="#ffca08")
 
     output_filename = f"output_{lottery_type}.jpg"
