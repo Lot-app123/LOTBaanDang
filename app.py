@@ -151,7 +151,18 @@ def create_image(lottery_type):
     units2 = random.sample([x for x in all_units if x not in units], 1)
     units3 = random.sample([x for x in all_units if x not in units + units2], 1)
 
-    random_6_digits = "".join(random.choices(f"{num1}{num2}" + "0123456789", k=6))
+    #random_6_digits = "".join(random.choices(f"{num1}{num2}" + "0123456789", k=6))
+    other_digits = [i for i in range(10) if i not in (num1, num2)]
+
+    # 🔹 สุ่มเลขเพิ่มอีก 4 ตัว (ไม่ซ้ำกัน)
+    extra_digits = random.sample(other_digits, 4)
+
+    #🔹 รวมเลขทั้งหมด
+    six_digits = [num1, num2] + extra_digits
+    random.shuffle(six_digits)  # สลับตำแหน่งให้ไม่เรียง
+
+    # 🔹 แปลงเป็นข้อความ
+    random_6_digits = ''.join(str(d) for d in six_digits)
 
     draw_bold_text(draw, (160, 190), f"{num1} - {num2}", font=font_large, fill="#ffca08", boldness=1)
     draw_bold_text(draw,(120, 320), " ".join(tens[:1]), font=font_medium, fill="#ffca08", boldness=1)
